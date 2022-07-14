@@ -1,9 +1,9 @@
-#From a database with variables on city and weather stations:
+# MySQL Code - Change Language to MySQL to correctly see the syntax!
+
+/*From a database with variables on city and weather stations:
 #Query the two cities in STATION with the shortest and longest CITY names, as well as their respective lengths 
 #(i.e.: number of characters in the name). If there is more than one smallest or largest city, choose the one 
-#that comes first when ordered alphabetically.
-
-## SQL CODE BELOW
+#that comes first when ordered alphabetically.*/
 
 WITH Y AS (WITH X AS (SELECT DISTINCT CITY
           FROM STATION
@@ -14,7 +14,7 @@ SELECT DISTINCT CITY, Small
 FROM STATION
 CROSS JOIN Y
 ORDER BY LENGTH(CITY), CITY ASC
-LIMIT 1;
+LIMIT 1; # OUTPUT: shortest name of city (ordered alphabetically), length of shortest city name
 WITH K AS (WITH L AS (SELECT DISTINCT CITY
           FROM STATION
           ORDER BY CITY ASC)
