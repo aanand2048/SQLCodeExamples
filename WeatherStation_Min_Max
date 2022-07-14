@@ -1,0 +1,27 @@
+#From a database with variables on city and weather stations:
+#Query the two cities in STATION with the shortest and longest CITY names, as well as their respective lengths 
+#(i.e.: number of characters in the name). If there is more than one smallest or largest city, choose the one 
+#that comes first when ordered alphabetically.
+
+## SQL CODE BELOW
+
+WITH Y AS (WITH X AS (SELECT DISTINCT CITY
+          FROM STATION
+          ORDER BY CITY ASC)
+SELECT MIN(LENGTH(CITY)) AS Small
+FROM X)
+SELECT DISTINCT CITY, Small
+FROM STATION
+CROSS JOIN Y
+ORDER BY LENGTH(CITY), CITY ASC
+LIMIT 1;
+WITH K AS (WITH L AS (SELECT DISTINCT CITY
+          FROM STATION
+          ORDER BY CITY ASC)
+SELECT MAX(LENGTH(CITY)) AS Big
+FROM L)
+SELECT DISTINCT CITY, Big
+FROM STATION
+CROSS JOIN K
+ORDER BY LENGTH(CITY) DESC, CITY ASC
+LIMIT 1;
