@@ -1,0 +1,122 @@
+# MySQL Code - Change Language to MySQL to correctly see the syntax!
+
+/*From a database with variables on city and weather stations:
+#Query the two cities in STATION with the shortest and longest CITY names, as well as their respective lengths 
+#(i.e.: number of characters in the name). If there is more than one smallest or largest city, choose the one 
+#that comes first when ordered alphabetically.*/
+
+WITH Y AS (WITH X AS (SELECT DISTINCT CITY
+          FROM STATION
+          ORDER BY CITY ASC)
+SELECT MIN(LENGTH(CITY)) AS Small
+FROM X)
+SELECT DISTINCT CITY, Small
+FROM STATION
+CROSS JOIN Y
+ORDER BY LENGTH(CITY), CITY ASC
+LIMIT 1; # OUTPUT: shortest name of city (ordered alphabetically), length of shortest city name
+WITH K AS (WITH L AS (SELECT DISTINCT CITY
+          FROM STATION
+          ORDER BY CITY ASC)
+SELECT MAX(LENGTH(CITY)) AS Big
+FROM L)
+SELECT DISTINCT CITY, Big
+FROM STATION
+CROSS JOIN K
+ORDER BY LENGTH(CITY) DESC, CITY ASC
+LIMIT 1;
+
+/*Query the list of CITY names from STATION which have vowels (i.e., a, e, i, o, and u) as their first characters. Your result cannot contain duplicates.*/
+
+SELECT DISTINCT CITY
+FROM STATION
+WHERE CITY REGEXP '^[AEIOU]';
+
+/*Query the list of CITY names from STATION which have vowels (i.e., a, e, i, o, and u) as both their last characters. Your result cannot contain duplicates.*/
+
+SELECT DISTINCT CITY
+FROM STATION
+WHERE CITY REGEXP '[AEIOU]$';
+
+/*Query the list of CITY names from STATION which have vowels (i.e., a, e, i, o, and u) as both their first and last characters. Your result cannot contain duplicates.*/
+
+SELECT DISTINCT CITY
+FROM STATION
+WHERE CITY REGEXP '[AEIOU]$' AND CITY REGEXP '^[AEIOU]';
+
+/*Query the list of CITY names from STATION that do not start with vowels. Your result cannot contain duplicates.*/
+
+SELECT DISTINCT CITY
+FROM STATION
+WHERE CITY NOT REGEXP '^[AEIOU]';
+
+/*Query the list of CITY names from STATION that do not end with vowels. Your result cannot contain duplicates.*/
+
+SELECT DISTINCT CITY
+FROM STATION
+WHERE CITY NOT REGEXP '[AEIOU]$';
+
+/*Query the list of CITY names from STATION that either do not start with vowels or do not end with vowels. Your result cannot contain duplicates.*/
+
+SELECT DISTINCT CITY
+FROM STATION
+WHERE CITY NOT REGEXP '[AEIOU]$' OR CITY NOT REGEXP '^[AEIOU]'
+ORDER BY CITY;
+
+/*Query the list of CITY names from STATION that do not start with vowels and do not end with vowels. Your result cannot contain duplicates.*/
+
+SELECT DISTINCT CITY
+FROM STATION
+WHERE CITY NOT REGEXP '[AEIOU]$' AND CITY NOT REGEXP '^[AEIOU]'
+ORDER BY CITY;
+
+/*Query the following two values from the STATION table:
+
+The sum of all values in LAT_N rounded to a scale of 2 decimal places.
+The sum of all values in LONG_W rounded to a scale of 2 decimal places. */
+
+SELECT ROUND(SUM(LAT_N),2), ROUND(SUM(LONG_W),2)
+FROM STATION;
+
+/*Query the sum of Northern Latitudes (LAT_N) from STATION having values greater than 38.7880 and less than 137.2345. Truncate your answer to  decimal places. */
+
+SELECT TRUNCATE(SUM(LAT_N),4)
+FROM STATION
+WHERE LAT_N > 38.7880 AND LAT_N < 137.2345;
+
+/*Query the greatest value of the Northern Latitudes (LAT_N) from STATION that is less than 137.2345. Truncate your answer to  decimal places. */
+
+SELECT TRUNCATE(MAX(LAT_N),4)
+FROM STATION
+WHERE LAT_N < 137.2345;
+
+/* Query the Western Longitude (LONG_W) for the largest Northern Latitude (LAT_N) in STATION that is less than 137.2345. Round your answer to  decimal places. */
+
+SELECT ROUND(MAX(LONG_W),4)
+FROM STATION
+WHERE LAT_N = (SELECT MAX(LAT_N)
+        FROM STATION
+        WHERE LAT_N < 137.2345);
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
