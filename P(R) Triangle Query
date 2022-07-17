@@ -1,0 +1,28 @@
+# MySQL Code - Change Language to MySQL to correctly see the syntax!
+
+/* P(R) represents a pattern drawn by Julia in R rows. The following pattern represents P(5):
+
+* * * * * 
+* * * * 
+* * * 
+* * 
+*
+Write a query to print the pattern P(20). */
+
+SET @NUMBER = 21;
+SELECT REPEAT('* ', @NUMBER := @NUMBER - 1)
+    FROM information_schema.tables LIMIT 20;
+
+/* P(R) represents a pattern drawn by Julia in R rows. The following pattern represents P(5):
+
+* 
+* * 
+* * * 
+* * * * 
+* * * * *
+Write a query to print the pattern P(20). */
+
+SET @NUMBER = 0;
+SELECT REPEAT('* ', @NUMBER := @NUMBER + 1)
+    FROM information_schema.tables LIMIT 20;
+    
