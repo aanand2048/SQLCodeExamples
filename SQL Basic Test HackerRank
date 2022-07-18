@@ -1,0 +1,28 @@
+/* A university has started a student-advisor plan which assigns a professor as an advisor to each student for academic guidance. Write a query to find the roll number and names of students who either have a male advisor with a salary of more than 15,000 or a female advisor with a salary of more than 20,000. */
+
+WITH MERGED AS (
+    SELECT *
+    FROM STUDENT_INFORMATION AS S
+    LEFT JOIN FACULTY_INFORMATION AS F
+    ON S.ADVISOR = F.EMPLOYEE_ID
+)
+SELECT ROLL_NUMBER, NAME
+FROM MERGED
+WHERE GENDER = 'M' AND SALARY > 15000
+UNION
+SELECT ROLL_NUMBER, NAME
+FROM MERGED
+WHERE GENDER = 'F' AND SALARY > 20000;
+
+/* A stock is considered profitable if the predicted price is strictly greater than the current price. Write a query to find the stock_codes of all the stocks which are profitable based on this definition. Sort the output in ascending order. */
+
+WITH PRED AS (
+    SELECT O.STOCK_CODE AS TICK, O.PRICE AS D1, T.PRICE AS D2
+    FROM PRICE_TODAY AS O
+    LEFT JOIN PRICE_TOMORROW AS T
+    ON O.STOCK_CODE = T.STOCK_CODE
+)
+SELECT TICK
+FROM PRED
+WHERE D1 < D2
+ORDER BY TICK ASC;
