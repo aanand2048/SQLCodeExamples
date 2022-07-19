@@ -1,0 +1,40 @@
+/* Given the product and invoice details for products at an online store, find all the products that were not sold. For each such product, display its SKU and product name. Order the results by SKU, ascending. */
+
+SELECT SKU, PRODUCT_NAME
+FROM PRODUCT
+WHERE ID NOT IN (SELECT PRODUCT_ID
+                FROM INVOICE_ITEM)
+ORDER BY SKU ASC;
+
+# Need to figure out below code:
+
+# For each pair of city and product, return the names of the city and product as well the total amount spent on the product to 2dp. Order the results by the amount spent from high to low then by city name and product name in ascending order.
+
+WITH A AS (
+        SELECT CITY.CITY_NAME, CUSTOMER.ID AS CUSTOMER_ID
+        FROM CITY
+        LEFT JOIN CUSTOMER
+        ON CITY.ID = CUSTOMER.CITY_ID
+),
+    B AS (
+        SELECT A.CITY_NAME, INVOICE.ID AS INVOICE_ID
+        FROM A
+        LEFT JOIN INVOICE
+        ON A.CUSTOMER_ID = INVOICE.CUSTOMER_ID
+),
+    C AS (
+        SELECT B.CITY_NAME, INVOICE_ITEM.PRODUCT_ID, INVOICE_ITEM.LINE_TOTAL_PRICE
+        FROM B
+        LEFT JOIN INVOICE_ITEM
+        ON B.INVOICE_ID = INVOICE_ITEM.INVOICE_ID
+        GROUP BY B.CITY_NAME, INVOICE_ITEM.PRODUCT_ID
+),
+    D AS (
+        SELECT C.CITY_NAME, C.LINE_TOTAL_PRICE, PRODUCT.PRODUCT_NAME
+        FROM C
+        LEFT JOIN PRODUCT
+        ON C.PRODUCT_ID = PRODUCT.ID
+    )
+SELECT *
+FROM D
+ORDER BY LINE_TOTAL_PRICE;
